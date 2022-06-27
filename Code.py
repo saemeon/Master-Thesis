@@ -184,7 +184,7 @@ class Chin_MV(Simulator):
         Simulator.__init__(self)
         
         #================================
-        self.exposure   = self.exposure_abs
+        self.exposure   = self.exposure_frac
         self.intercept  = intercept
         self.direct     = direct
         self.indirect   = indirect
@@ -267,6 +267,15 @@ class Chin_MV(Simulator):
         C         = np.expand_dims( np.repeat([np.repeat([self.C], o , axis=0)],h , axis=0)     , axis = -1)
         intercept = np.ones(EhatH.shape)
 
+        
+        G = sm.OLS(EhatH.flatten(), EhatO.flatten()).fit().params[0]
+        print(G)
+        #F = np.append(np.ones(self.EO.shape),self.W, axis =-1)
+        #F = np.append(F,self.EO * G, axis = -1).reshape(self.n,par_num, order="F")
+        #print("seperate E fit",sm.OLS(self.Y, F).fit().params)
+        
+        
+        
         #combine features
         XH = EhatH
         XO = EhatO
@@ -300,7 +309,7 @@ class Chin_MV(Simulator):
         def fun(theta):
             _ = X*theta
             return np.sum((np.array(_ - b).flatten())**2)
-        print(scipy.optimize.minimize(fun, theta0))
+        #print(scipy.optimize.minimize(fun, theta0))
         
         #====================
         # One obs in total
@@ -312,9 +321,7 @@ class Chin_MV(Simulator):
         #print("ana", np.dot(inv(X),theta0))
         #print("ana LS", np.dot(inv(np.dot(X.T, X)),np.dot(X.T, b)))
         results["Analytical Estimator with 1 obs total"]=np.round(beta_global,2)        
-        for key, value in results.items():
-            print(key,'\t',value)
-        return 
+        return results
    
     def run_UV(self, steps):
         results = {}
