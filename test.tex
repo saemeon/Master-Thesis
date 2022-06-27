@@ -1,0 +1,115 @@
+% This file was created with tikzplotlib v0.10.1.
+\begin{tikzpicture}
+
+\definecolor{darkgray}{RGB}{169,169,169}
+\definecolor{darkviolet1910191}{RGB}{191,0,191}
+\definecolor{dimgray85}{RGB}{85,85,85}
+\definecolor{gainsboro229}{RGB}{229,229,229}
+\definecolor{gray}{RGB}{128,128,128}
+\definecolor{green01270}{RGB}{0,127,0}
+\definecolor{lightgray204}{RGB}{204,204,204}
+
+\begin{axis}[
+axis background/.style={fill=gainsboro229},
+axis line style={white},
+legend cell align={left},
+legend style={
+  fill opacity=0.8,
+  draw opacity=1,
+  text opacity=1,
+  at={(0.97,0.03)},
+  anchor=south east,
+  draw=lightgray204,
+  fill=gainsboro229
+},
+tick align=outside,
+tick pos=left,
+x grid style={white},
+xlabel=\textcolor{dimgray85}{\(\displaystyle num \ iterations\)},
+xmajorgrids,
+xmin=-0.5, xmax=10.5,
+xtick style={color=dimgray85},
+y grid style={white},
+ylabel=\textcolor{dimgray85}{\(\displaystyle \theta\)},
+ymajorgrids,
+ymin=6.04310795411168, ymax=13.5115403714489,
+ytick style={color=dimgray85}
+]
+\addplot [semithick, darkviolet1910191]
+table {%
+-0.5 10.8501964532792
+10.5 10.8501964532792
+};
+\addlegendentry{Pot.Obs}
+\addplot [semithick, darkgray]
+table {%
+-0.5 11.093083882344
+10.5 11.093083882344
+};
+\addlegendentry{Pot.Hidden}
+\addplot [semithick, gray]
+table {%
+-0.5 11.1021084577201
+10.5 11.1021084577201
+};
+\addlegendentry{Obs}
+\addplot [semithick, black]
+table {%
+0 6.38258215489973
+1 7.71069129870435
+2 8.65110328443224
+3 9.31699336359187
+4 9.7884990486029
+5 10.1223643785659
+6 10.3587688633786
+7 10.5261629454349
+8 10.6446919095942
+9 10.7286202968591
+10 10.7880485913596
+};
+\addlegendentry{Iterative}
+\addplot [semithick, black, dashed]
+table {%
+0 10.7880485913596
+1 11.398070630531
+2 11.8621319809787
+3 12.2151568278707
+4 12.4837130056325
+5 12.6880114317884
+6 12.8434271339244
+7 12.9616563387446
+8 13.0515967030726
+9 13.1200169309491
+10 13.1720661706608
+};
+\addlegendentry{Upper CI}
+\addplot [semithick, black, dashed]
+table {%
+0 8.40403101205828
+1 8.76670342716107
+2 9.00730799646387
+3 9.16693016886697
+4 9.27282690223541
+5 9.34308104029955
+6 9.38968912496976
+7 9.42060991649157
+8 9.44112342514786
+9 9.45473252170332
+10 9.46376108488863
+};
+\addlegendentry{Lower CI}
+\addplot [semithick, red]
+table {%
+-0.5 10
+10.5 10
+};
+\addlegendentry{True}
+\addplot [semithick, green01270]
+table {%
+-0.5 6.38258215489973
+10.5 6.38258215489973
+};
+\addlegendentry{Naiv}
+\end{axis}
+
+\end{tikzpicture}

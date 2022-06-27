@@ -1,0 +1,109 @@
+% This file was created with tikzplotlib v0.10.1.
+\begin{tikzpicture}
+
+\definecolor{darkgray}{RGB}{169,169,169}
+\definecolor{darkgray176}{RGB}{176,176,176}
+\definecolor{darkviolet1910191}{RGB}{191,0,191}
+\definecolor{gray}{RGB}{128,128,128}
+\definecolor{green01270}{RGB}{0,127,0}
+\definecolor{lightgray204}{RGB}{204,204,204}
+
+\begin{axis}[
+legend cell align={left},
+legend style={
+  fill opacity=0.8,
+  draw opacity=1,
+  text opacity=1,
+  at={(0.97,0.03)},
+  anchor=south east,
+  draw=lightgray204
+},
+tick align=outside,
+tick pos=left,
+x grid style={darkgray176},
+xlabel={\(\displaystyle num \ iterations\)},
+xmin=-0.5, xmax=10.5,
+xtick style={color=black},
+y grid style={darkgray176},
+ylabel={\(\displaystyle \theta\)},
+ymin=8.51090926670907, ymax=10.9967103399989,
+ytick style={color=black}
+]
+\addplot [semithick, darkviolet1910191]
+table {%
+-0.5 9.78563289426937
+10.5 9.78563289426937
+};
+\addlegendentry{Pot.Obs}
+\addplot [semithick, darkgray]
+table {%
+-0.5 9.85773813735497
+10.5 9.85773813735497
+};
+\addlegendentry{Pot.Hidden}
+\addplot [semithick, gray]
+table {%
+-0.5 9.85603531290292
+10.5 9.85603531290292
+};
+\addlegendentry{Obs}
+\addplot [semithick, black]
+table {%
+0 8.62390022458588
+1 9.14567249909907
+2 9.438127450855
+3 9.60204934357412
+4 9.69392806455759
+5 9.74542636798448
+6 9.77429132417302
+7 9.7904702201817
+8 9.79953854075526
+9 9.80462136210356
+10 9.80747029897662
+};
+\addlegendentry{Iterative}
+\addplot [semithick, black, dashed]
+table {%
+0 9.80747029897662
+1 10.2363628449018
+2 10.4954445838763
+3 10.6519484637124
+4 10.746487988191
+5 10.8035966151337
+6 10.8380943058009
+7 10.8589333755715
+8 10.8715216625121
+9 10.8791258871653
+10 10.8837193821221
+};
+\addlegendentry{Upper CI}
+\addplot [semithick, black, dashed]
+table {%
+0 8.73122121583119
+1 8.82114915664675
+2 8.86759202812629
+3 8.8915772355235
+4 8.9039642855822
+5 8.91036152062027
+6 8.9136653432365
+7 8.91537158723325
+8 8.91625276909881
+9 8.91670785142096
+10 8.91694287659343
+};
+\addlegendentry{Lower CI}
+\addplot [semithick, red]
+table {%
+-0.5 10
+10.5 10
+};
+\addlegendentry{True}
+\addplot [semithick, green01270]
+table {%
+-0.5 8.62390022458588
+10.5 8.62390022458588
+};
+\addlegendentry{Naiv}
+\end{axis}
+
+\end{tikzpicture}
