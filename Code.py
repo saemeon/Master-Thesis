@@ -196,8 +196,8 @@ class Chin_MV(Simulator):
         
         #=================================        
         #Causal Function
-        self.t0 = 0
-        self.tW = 9
+        self.t0 = 2
+        self.tW = 8
         self.tE = 4
         self.tC = 0
         self.Y = self.t0 + self.tW*self.W + self.tC*self.C + self.tE*self.E #+ 0.0*np.random.normal(size =self.n)
@@ -263,8 +263,8 @@ class Chin_MV(Simulator):
         #linear features
         EhatH     = np.expand_dims([np.repeat([EhatH_i], o, axis=0) for EhatH_i in self.EhatH]  , axis = -1)
         EhatO     = np.expand_dims(                                                self.EhatO   , axis = -1)
-        W         = np.expand_dims(np.repeat([np.repeat([self.W], o , axis=0)],h , axis=0) , axis = -1)
-        C         = np.expand_dims(np.repeat([np.repeat([self.C], o , axis=0)],h , axis=0) , axis = -1)
+        W         = np.expand_dims( np.repeat([np.repeat([self.W], o , axis=0)],h , axis=0)     , axis = -1)
+        C         = np.expand_dims( np.repeat([np.repeat([self.C], o , axis=0)],h , axis=0)     , axis = -1)
         intercept = np.ones(EhatH.shape)
 
         #combine features
@@ -289,8 +289,6 @@ class Chin_MV(Simulator):
         beta_obs = sm.OLS(b,X).fit().params 
         results["Analytical Estimator with 1 obs per Oij"]=np.round(beta_obs,2)
         
-        
-        
         #====================
         # One obs per Hi
         XH = XH.reshape(h, o*n, par_num)
@@ -300,10 +298,10 @@ class Chin_MV(Simulator):
         beta_hidden = sm.OLS(b,X).fit().params 
         results["Analytical Estimator with 1 obs per Hi"]=np.round(beta_hidden,2)
         def fun(theta):
-            target = b
             _ = X*theta
-            return np.array(_ - target).flatten()
-        #print(scipy.optimize.least_squares(fun, theta0))
+            return np.sum((np.array(_ - b).flatten())**2)
+        print(scipy.optimize.minimize(fun, theta0))
+        
         #====================
         # One obs in total
         XH = XH.reshape(h*o*n, par_num)
@@ -311,30 +309,12 @@ class Chin_MV(Simulator):
         X = np.array(np.dot(inv(np.dot(XO.T, XO)),np.dot(XO.T, XH))) #.reshape(h*par_num,par_num, order="F")
         b =  theta0
         beta_global = sm.OLS(b,X).fit().params
-        print("ana", np.dot(inv(X),theta0))
-        print("ana LS", np.dot(inv(np.dot(X.T, X)),np.dot(X.T, b)))
+        #print("ana", np.dot(inv(X),theta0))
+        #print("ana LS", np.dot(inv(np.dot(X.T, X)),np.dot(X.T, b)))
         results["Analytical Estimator with 1 obs total"]=np.round(beta_global,2)        
-        
-        if False:
-            #plot results
-            fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2)
-            ax1.axhline(0, color = "w")
-            ax2.axhline(0, color = "w")
-            ax3.axhline(0, color = "w")
-
-            ax1.axhline(beta[0], color = "m")
-            ax2.axhline(beta[1], color = "m")
-            ax3.axhline(beta[2], color = "m")
-
-            ax1.axhline(self.b0, color = "r")
-            ax2.axhline(self.bX, color = "r")
-            ax3.axhline(self.bE, color = "r")
-
-            ax1.axhline(beta0[0], color = "g")
-            ax2.axhline(beta0[1], color = "g")
-            ax3.axhline(beta0[2], color = "g")
-
-        return results
+        for key, value in results.items():
+            print(key,'\t',value)
+        return 
    
     def run_UV(self, steps):
         results = {}
@@ -537,11 +517,6 @@ class AronowSamii(Simulator):
         ax2.set_title(r'$c_{10}$')
         ax3.set_title(r'$c_{01}$')
         ax4.set_title(r'$c_{00}$')
-        
-        #ax1.axhline(0, color = "w")
-        #ax2.axhline(0, color = "w")
-        #ax3.axhline(0, color = "w")
-        #ax4.axhline(0, color = "w")
         
         #estimate
         theta_list = list(zip(*theta_list))
