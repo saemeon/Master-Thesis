@@ -8,6 +8,7 @@ import networkx as nx
 import scipy
 import pickle
 import pprint
+from tqdm import tqdm
 import tikzplotlib
 import statsmodels.api as sm
 from sklearn.linear_model import LinearRegression
@@ -37,7 +38,7 @@ class Simulator(dict):
         
         #================================
         self.p_er = 0.3    #edge removal probability
-        self.p_t = 0.3     #treatment probability 
+        self.p_t = 0.2     #treatment probability 
         self.n = 50        #number of nodes
         self.h = 50
         self.o = 50
@@ -45,7 +46,7 @@ class Simulator(dict):
         #=================================
         # True Hidden network
         if True:#GNP
-            self.p_e = 0.4  #edge probability
+            self.p_e = 0.2  #edge probability
             self.GH = nx.gnp_random_graph(self.n, self.p_e, seed=None, directed=False)
             self.AH = nx.adjacency_matrix(self.GH)
 
@@ -184,7 +185,7 @@ class Chin_MV(Simulator):
         Simulator.__init__(self)
         
         #================================
-        self.exposure   = self.exposure_frac
+        self.exposure   = self.exposure_abs
         self.intercept  = intercept
         self.direct     = direct
         self.indirect   = indirect
@@ -257,7 +258,7 @@ class Chin_MV(Simulator):
         #======================
         # Naiv
         theta0 = np.array(self.theta0)
-        results["Naiv estimator:"]=np.round(theta0,2)
+        results["NaivEst"]=np.round(theta0,2)
         
         #====================
         #linear features
@@ -269,7 +270,7 @@ class Chin_MV(Simulator):
 
         
         G = sm.OLS(EhatH.flatten(), EhatO.flatten()).fit().params[0]
-        print(G)
+        #print(G)
         #F = np.append(np.ones(self.EO.shape),self.W, axis =-1)
         #F = np.append(F,self.EO * G, axis = -1).reshape(self.n,par_num, order="F")
         #print("seperate E fit",sm.OLS(self.Y, F).fit().params)
@@ -320,7 +321,7 @@ class Chin_MV(Simulator):
         beta_global = sm.OLS(b,X).fit().params
         #print("ana", np.dot(inv(X),theta0))
         #print("ana LS", np.dot(inv(np.dot(X.T, X)),np.dot(X.T, b)))
-        results["Analytical Estimator with 1 obs total"]=np.round(beta_global,2)        
+        results["AnaEst1tot"]=np.round(beta_global,2)        
         return results
    
     def run_UV(self, steps):
